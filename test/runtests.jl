@@ -148,6 +148,34 @@ end
             te.DestroyContext(engine)
         end
     end
+
+    @testset "UnregisterTest cleanup" begin
+        do_engine() do engine
+            t = @register_test(engine, "foo", "unreg-one")
+            t.TestFunc = () -> nothing
+            ptr = getfield(t, :ptr)
+            @test haskey(ImGuiTestEngine.TEST_REGISTRY, ptr)
+            @test t in engine.tests
+
+            te.UnregisterTest(engine, t)
+            @test !haskey(ImGuiTestEngine.TEST_REGISTRY, ptr)
+            @test t ∉ engine.tests
+            @test getfield(t, :ptr) === nothing
+        end
+
+        do_engine() do engine
+            t1 = @register_test(engine, "foo", "unreg-all-1"); t1.TestFunc = () -> nothing
+            t2 = @register_test(engine, "foo", "unreg-all-2"); t2.TestFunc = () -> nothing
+            p1, p2 = getfield(t1, :ptr), getfield(t2, :ptr)
+
+            te.UnregisterAllTests(engine)
+            @test !haskey(ImGuiTestEngine.TEST_REGISTRY, p1)
+            @test !haskey(ImGuiTestEngine.TEST_REGISTRY, p2)
+            @test isempty(engine.tests)
+            @test getfield(t1, :ptr) === nothing
+            @test getfield(t2, :ptr) === nothing
+        end
+    end
 end
 
 @testset "Context" begin

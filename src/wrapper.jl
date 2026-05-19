@@ -292,8 +292,10 @@ $(TYPEDSIGNATURES)
 """
 function CaptureScreenshot(engine::Engine, args::VoidablePtrOrRef{lib.ImGuiCaptureArgs})
     ok = lib.cImGuiTestEngine_CaptureScreenshot(engine.ptr, args)
-    ok || @warn "ImGuiTestEngine_CaptureScreenshot returned false — capture skipped. \
-                 Likely cause: engine_io.ScreenCaptureFunc is not installed."
+    if !ok
+        @warn "ImGuiTestEngine_CaptureScreenshot returned false — capture skipped. \
+               Likely cause: engine_io.ScreenCaptureFunc is not installed."
+    end
     return ok
 end
 
@@ -307,8 +309,10 @@ $(TYPEDSIGNATURES)
 """
 function CaptureBeginVideo(engine::Engine, args::VoidablePtrOrRef{lib.ImGuiCaptureArgs})
     ok = lib.cImGuiTestEngine_CaptureBeginVideo(engine.ptr, args)
-    ok || @warn "ImGuiTestEngine_CaptureBeginVideo returned false — capture skipped. \
-                 Likely cause: engine_io.ScreenCaptureFunc is not installed."
+    if !ok
+        @warn "ImGuiTestEngine_CaptureBeginVideo returned false — capture skipped. \
+               Likely cause: engine_io.ScreenCaptureFunc is not installed."
+    end
     return ok
 end
 

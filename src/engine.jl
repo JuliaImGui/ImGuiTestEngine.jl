@@ -215,12 +215,12 @@ _test_runner_static(ctx::Ptr{Cvoid}) = _runner_static(ctx, :TestFunc)
 
 # Initialize in __init__: @cfunction at module-load freezes trampoline
 # addresses into the precompile image, causing bus errors on use.
-const _GUI_CFN  = Ref{Ptr{Cvoid}}(C_NULL)
-const _TEST_CFN = Ref{Ptr{Cvoid}}(C_NULL)
+_GUI_CFN::Ptr{Cvoid}  = C_NULL
+_TEST_CFN::Ptr{Cvoid} = C_NULL
 
 function __init__()
-    _GUI_CFN[]  = @cfunction(_gui_runner_static,  Cvoid, (Ptr{Cvoid},))
-    _TEST_CFN[] = @cfunction(_test_runner_static, Cvoid, (Ptr{Cvoid},))
+    global _GUI_CFN  = @cfunction(_gui_runner_static,  Cvoid, (Ptr{Cvoid},))
+    global _TEST_CFN = @cfunction(_test_runner_static, Cvoid, (Ptr{Cvoid},))
 end
 
 function Base.setproperty!(test::ImGuiTest, name::Symbol, value)
@@ -231,10 +231,10 @@ function Base.setproperty!(test::ImGuiTest, name::Symbol, value)
     if name == :GuiFunc || name == :TestFunc
         TEST_REGISTRY[getfield(test, :ptr)] = test
         if name == :GuiFunc
-            test.ptr.GuiFunc = _GUI_CFN[]
+            test.ptr.GuiFunc = _GUI_CFN
             setfield!(test, :_gui_func, value)
         else
-            test.ptr.TestFunc = _TEST_CFN[]
+            test.ptr.TestFunc = _TEST_CFN
             setfield!(test, :_test_func, value)
         end
     else
