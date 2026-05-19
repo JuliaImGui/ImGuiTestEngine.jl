@@ -290,8 +290,12 @@ $(TYPEDSIGNATURES)
 
 [Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.8/imgui_test_engine/imgui_te_internal.h#L236).
 """
-CaptureScreenshot(engine::Engine, args::VoidablePtrOrRef{lib.ImGuiCaptureArgs}) =
-    lib.cImGuiTestEngine_CaptureScreenshot(engine.ptr, args)
+function CaptureScreenshot(engine::Engine, args::VoidablePtrOrRef{lib.ImGuiCaptureArgs})
+    ok = lib.cImGuiTestEngine_CaptureScreenshot(engine.ptr, args)
+    ok || @warn "ImGuiTestEngine_CaptureScreenshot returned false — capture skipped. \
+                 Likely cause: engine_io.ScreenCaptureFunc is not installed."
+    return ok
+end
 
 """
 $(TYPEDSIGNATURES)
@@ -301,8 +305,12 @@ $(TYPEDSIGNATURES)
 
 [Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.8/imgui_test_engine/imgui_te_internal.h#L237).
 """
-CaptureBeginVideo(engine::Engine, args::VoidablePtrOrRef{lib.ImGuiCaptureArgs}) =
-    lib.cImGuiTestEngine_CaptureBeginVideo(engine.ptr, args)
+function CaptureBeginVideo(engine::Engine, args::VoidablePtrOrRef{lib.ImGuiCaptureArgs})
+    ok = lib.cImGuiTestEngine_CaptureBeginVideo(engine.ptr, args)
+    ok || @warn "ImGuiTestEngine_CaptureBeginVideo returned false — capture skipped. \
+                 Likely cause: engine_io.ScreenCaptureFunc is not installed."
+    return ok
+end
 
 """
 $(TYPEDSIGNATURES)

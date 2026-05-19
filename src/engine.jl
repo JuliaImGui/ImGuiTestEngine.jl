@@ -323,3 +323,6 @@ function ig._start_test_engine(engine::Engine, ctx::Ptr{libig.ImGuiContext})
 end
 
 ig._show_test_window(engine::Engine) = ShowTestEngineWindows(engine, C_NULL)
+
+# Called by GLFW backend per frame to advance screen-capture state.
+ig._post_swap(engine::Engine) = PostSwap(engine)
