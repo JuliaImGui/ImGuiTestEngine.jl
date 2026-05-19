@@ -752,20 +752,6 @@ RegisterTest(engine::Engine, category, name, src_file = C_NULL, src_line = 0) =
 """
 $(TYPEDSIGNATURES)
 
-[Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.8/imgui_test_engine/imgui_te_engine.h#L209).
-"""
-UnregisterTest(engine::Engine, test::ImGuiTest) = lib.cImGuiTestEngine_UnregisterTest(engine.ptr, test.ptr)
-
-"""
-$(TYPEDSIGNATURES)
-
-[Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.8/imgui_test_engine/imgui_te_engine.h#L210).
-"""
-UnregisterAllTests(engine::Engine) = lib.cImGuiTestEngine_UnregisterAllTests(engine.ptr)
-
-"""
-$(TYPEDSIGNATURES)
-
 [Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.8/imgui_test_engine/imgui_te_engine.h#L213).
 """
 QueueTest(engine::Engine, test::ImGuiTest, run_flags = 0) =

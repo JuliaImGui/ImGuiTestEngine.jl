@@ -25,6 +25,8 @@ const args_to_annotate = [(:igBegin, :name)]
 const function_ignorelist = (
     :cImGuiTestEngine_CreateContext,
     :cImGuiTestEngine_DestroyContext,
+    :cImGuiTestEngine_UnregisterTest,
+    :cImGuiTestEngine_UnregisterAllTests,
     :ImGuiTestEngine_destroy
 )
 const struct_ignorelist = (
