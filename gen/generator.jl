@@ -27,6 +27,8 @@ const function_ignorelist = (
     :cImGuiTestEngine_DestroyContext,
     :cImGuiTestEngine_UnregisterTest,
     :cImGuiTestEngine_UnregisterAllTests,
+    :cImGuiTestEngine_CaptureScreenshot,
+    :cImGuiTestEngine_CaptureBeginVideo,
     :ImGuiTestEngine_destroy
 )
 const struct_ignorelist = (

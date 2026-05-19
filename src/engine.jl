@@ -169,6 +169,40 @@ function UnregisterAllTests(engine::Engine)
     return nothing
 end
 
+"""
+$(TYPEDSIGNATURES)
+
+!!! warning
+    This function is internal, it may change in the future.
+
+[Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.5/imgui_test_engine/imgui_te_internal.h#L236).
+"""
+function CaptureScreenshot(engine::Engine, args::Union{Ptr{lib.ImGuiCaptureArgs}, Ref{lib.ImGuiCaptureArgs}, Ptr{Cvoid}})
+    ok = lib.cImGuiTestEngine_CaptureScreenshot(engine.ptr, args)
+    if !ok
+        @warn "ImGuiTestEngine_CaptureScreenshot returned false — capture skipped. \
+               Likely cause: engine_io.ScreenCaptureFunc is not installed."
+    end
+    return ok
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+!!! warning
+    This function is internal, it may change in the future.
+
+[Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.5/imgui_test_engine/imgui_te_internal.h#L237).
+"""
+function CaptureBeginVideo(engine::Engine, args::Union{Ptr{lib.ImGuiCaptureArgs}, Ref{lib.ImGuiCaptureArgs}, Ptr{Cvoid}})
+    ok = lib.cImGuiTestEngine_CaptureBeginVideo(engine.ptr, args)
+    if !ok
+        @warn "ImGuiTestEngine_CaptureBeginVideo returned false — capture skipped. \
+               Likely cause: engine_io.ScreenCaptureFunc is not installed."
+    end
+    return ok
+end
+
 function GetResultSummary(engine::Engine)
     if !isassigned(engine)
         throw(ArgumentError("The `Engine` has already been destroyed, cannot use it."))
