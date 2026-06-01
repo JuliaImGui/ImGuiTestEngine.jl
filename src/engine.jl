@@ -126,7 +126,7 @@ function DestroyContext(engine::Engine; throw=true)
 
     # Drop registry entries owned by this engine's tests.
     for t in engine.tests
-        delete!(TEST_REGISTRY, getfield(t, :ptr))
+        delete!(TEST_REGISTRY, t.ptr)
     end
     empty!(engine.tests)
 
@@ -139,15 +139,13 @@ $(TYPEDSIGNATURES)
 Unregister a test from the engine. This removes the C-side test object and the
 Julia wrapper's bookkeeping (registry + engine.tests). After this call, the
 `ImGuiTest` wrapper is dead — using it is undefined behavior.
-
-[Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.5/imgui_test_engine/imgui_te_engine.h#L204).
 """
 function UnregisterTest(engine::Engine, test::ImGuiTest)
     lib.cImGuiTestEngine_UnregisterTest(engine.ptr, test.ptr)
-    delete!(TEST_REGISTRY, getfield(test, :ptr))
+    delete!(TEST_REGISTRY, test.ptr)
     filter!(t -> t !== test, engine.tests)
     # C side freed it; null to fail-fast on later access.
-    setfield!(test, :ptr, nothing)
+    test.ptr = nothing
     return nothing
 end
 
@@ -156,14 +154,12 @@ $(TYPEDSIGNATURES)
 
 Unregister all tests from the engine. After this call, any Julia `ImGuiTest`
 wrappers previously registered with this engine are dead.
-
-[Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.5/imgui_test_engine/imgui_te_engine.h#L205).
 """
 function UnregisterAllTests(engine::Engine)
     lib.cImGuiTestEngine_UnregisterAllTests(engine.ptr)
     for t in engine.tests
-        delete!(TEST_REGISTRY, getfield(t, :ptr))
-        setfield!(t, :ptr, nothing)
+        delete!(TEST_REGISTRY, t.ptr)
+        t.ptr = nothing
     end
     empty!(engine.tests)
     return nothing
@@ -174,8 +170,6 @@ $(TYPEDSIGNATURES)
 
 !!! warning
     This function is internal, it may change in the future.
-
-[Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.5/imgui_test_engine/imgui_te_internal.h#L236).
 """
 function CaptureScreenshot(engine::Engine, args::Union{Ptr{lib.ImGuiCaptureArgs}, Ref{lib.ImGuiCaptureArgs}, Ptr{Cvoid}})
     ok = lib.cImGuiTestEngine_CaptureScreenshot(engine.ptr, args)
@@ -191,8 +185,6 @@ $(TYPEDSIGNATURES)
 
 !!! warning
     This function is internal, it may change in the future.
-
-[Upstream link](https://github.com/ocornut/imgui_test_engine/blob/v1.92.5/imgui_test_engine/imgui_te_internal.h#L237).
 """
 function CaptureBeginVideo(engine::Engine, args::Union{Ptr{lib.ImGuiCaptureArgs}, Ref{lib.ImGuiCaptureArgs}, Ptr{Cvoid}})
     ok = lib.cImGuiTestEngine_CaptureBeginVideo(engine.ptr, args)
