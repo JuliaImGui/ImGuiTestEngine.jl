@@ -464,10 +464,7 @@ end
         ig.render(ctx; engine) do ; end
     end
 
-    # Errors if the test never ran (Refs unset); compares raw coords so it
-    # doesn't depend on an ImVec2 == method.
-    g, r = imgui_rect[], te_rect[]
-    @test (r[1].x, r[1].y, r[2].x, r[2].y) == (g[1].x, g[1].y, g[2].x, g[2].y)
+    @test te_rect[] == imgui_rect[]
 end
 
 # We only run the Aqua tests in CI because they're kinda slow
